@@ -212,7 +212,17 @@ admin_protocol: "http"
 openstack_release: "3.0.2"
 openstack_logging_debug: "False"
 
-openstack_region_name: "RegionOne"
+# Note(Inria): These variables are specific to our deployment. We
+# consider one Administrative Region (AR) and two OpenStack Regions
+# (OSR1, OSR2). We use the {{ openstack_regions }} variable to create
+# the required endpoint into keystone.
+# See, kolla/ansible/roles/keystone/tasks/register.yml
+openstack_region_name: "AR"
+openstack_regions:
+  - "{{ openstack_region_name }}"
+  - "OSR1"
+  - "OSR2"
+
 
 openstack_service_workers: "{{ [ansible_processor_vcpus, 5]|min if orchestration_engine == 'ANSIBLE' else '1'}}"
 
